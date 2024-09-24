@@ -104,23 +104,38 @@ public class UserListServlet extends HttpServlet {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://localhost/SUNLabDB", "root", "");
 
-            String updateQuery = "UPDATE Users SET status = ? WHERE userId = ?";
-            PreparedStatement pstmt = connection.prepareStatement(updateQuery);
+            if ("delete".equals(action)) { 
+                String deleteQuery = "DELETE FROM Users WHERE userId = ?";
+                PreparedStatement pstmt = connection.prepareStatement(deleteQuery);
+                pstmt.setInt(1, Integer.parseInt(userId));
 
-            if ("activate".equals(action)) {
-                pstmt.setString(1, "active");
-            } else if ("deactivate".equals(action)) {
-                pstmt.setString(1, "suspended");
-            }
-            pstmt.setInt(2, Integer.parseInt(userId));
-
-            int rowsUpdated = pstmt.executeUpdate();
-            if (rowsUpdated > 0) {
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.getWriter().write("Status updated successfully");
+                int rowsDeleted = pstmt.executeUpdate();
+                if (rowsDeleted > 0) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("User deleted successfully");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("Failed to delete user");
+                }
             } else {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("Failed to update status");
+                String updateQuery = "UPDATE Users SET status = ? WHERE userId = ?";
+                PreparedStatement pstmt = connection.prepareStatement(updateQuery);
+
+                if ("activate".equals(action)) {
+                    pstmt.setString(1, "active");
+                } else if ("deactivate".equals(action)) {
+                    pstmt.setString(1, "suspended");
+                }
+                pstmt.setInt(2, Integer.parseInt(userId));
+
+                int rowsUpdated = pstmt.executeUpdate();
+                if (rowsUpdated > 0) {
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.getWriter().write("Status updated successfully");
+                } else {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("Failed to update status");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
