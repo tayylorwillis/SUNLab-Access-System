@@ -13,7 +13,7 @@ Java, Java IDE, Tomcat, XAMPP, search engine required.
 - Download Apache Tomcat (I am using v. 10.0.27). Can be done from within Eclipse (https://www.youtube.com/watch?v=0CsWW1Ni8jA).
 - Download the SQL file to use for the database.
 
-# Executing program
+# Executing Program
 1. Open XAMPP (manager-osx) and start MySQL Database and Apache Web Server. *Note that if MySQL Database will not start, open your terminal and type sudo killall mysqld, then try again.*
 2. Confirm everything started properly by visiting http://localhost/phpmyadmin/ on your search engine. Make sure to implement the SQL file provided.
 3. In your IDE, start the AdminLoginServlet (mine runs on Tomcat 10.0.27). *Note that if you are not redirected to your search engine once Tomcat starts successfully, go to http://localhost:8080/CMPSC487WProject1/login.*
